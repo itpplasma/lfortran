@@ -48,13 +48,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install build tools (self-hosted runners)
-        if: contains(matrix.os, 'ubuntu')
-        shell: bash
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential cmake ninja-build zlib1g-dev
-
       - uses: mamba-org/setup-micromamba@v2.0.2
         with:
           micromamba-version: '2.0.4-0'
@@ -94,7 +87,6 @@ jobs:
       - uses: hendrikmuhs/ccache-action@main
         with:
           key: ${{ github.job }}-${{ matrix.os }}-${{ matrix.llvm-version }}
-          update-package-index: ${{ contains(matrix.os, 'ubuntu') }}
 
       - name: Setup Platform
         shell: bash -e -l {0}
@@ -335,12 +327,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install build tools (self-hosted runners)
-        shell: bash
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential cmake ninja-build zlib1g-dev
-
       - uses: mamba-org/setup-micromamba@v2.0.2
         with:
           micromamba-version: '2.0.4-0'
@@ -350,15 +336,15 @@ jobs:
 
       - uses: hendrikmuhs/ccache-action@main
         with:
-          key: ${{ github.job }}-wasm
-          update-package-index: true
+          variant: sccache
+          key: ${{ github.job }}-${{ matrix.os }}
 
       - name : Remove existing node
-        shell: bash -l {0}
+        shell: bash -e -l {0}
         run : |
-            which node || echo "node not found in PATH"
-            node -v || echo "node not installed"
-            sudo rm -rf /usr/local/bin/node /usr/local/bin/npm || true
+            which node
+            node -v
+            sudo rm -rf /usr/local/bin/node /usr/local/bin/npm
 
       - name: Setup Emscripten SDK
         shell: bash -l {0}
@@ -367,14 +353,14 @@ jobs:
 
           mkdir -p $HOME/ext
           cd $HOME/ext
-          curl -o emsdk.tar.gz -L https://github.com/emscripten-core/emsdk/archive/refs/tags/4.0.22.tar.gz
+          curl -o emsdk.tar.gz -L https://github.com/emscripten-core/emsdk/archive/refs/tags/4.0.13.tar.gz
           tar -xvf emsdk.tar.gz
-          mv emsdk-4.0.22 emsdk
+          mv emsdk-4.0.13 emsdk
           export EMSDK_PATH=$HOME/ext/emsdk
           echo $EMSDK_PATH
           cd $EMSDK_PATH
-          ./emsdk install 3.1.74
-          ./emsdk activate 3.1.74
+          ./emsdk install 3.1.35
+          ./emsdk activate 3.1.35
           ./emsdk install node-18.20.3-64bit
           ./emsdk activate node-18.20.3-64bit
 
