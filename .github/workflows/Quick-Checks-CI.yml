@@ -340,11 +340,11 @@ jobs:
           update-package-index: true
 
       - name : Remove existing node
-        shell: bash -e -l {0}
+        shell: bash -l {0}
         run : |
-            which node
-            node -v
-            sudo rm -rf /usr/local/bin/node /usr/local/bin/npm
+            which node || echo "node not found in PATH"
+            node -v || echo "node not installed"
+            sudo rm -rf /usr/local/bin/node /usr/local/bin/npm || true
 
       - name: Setup Emscripten SDK
         shell: bash -l {0}
