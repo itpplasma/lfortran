@@ -337,6 +337,7 @@ jobs:
       - uses: hendrikmuhs/ccache-action@main
         with:
           key: ${{ github.job }}-wasm
+          update-package-index: true
 
       - name : Remove existing node
         shell: bash -e -l {0}
