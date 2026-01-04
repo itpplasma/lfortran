@@ -28,7 +28,7 @@ env:
 jobs:
   Build:
     name: LFortran CI (OS=${{ matrix.os }}, LLVM=${{ matrix.llvm-version }})
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ contains(matrix.os, 'ubuntu') && 'plasma-runners' || matrix.os }}
     strategy:
       fail-fast: false
       matrix:
@@ -87,6 +87,7 @@ jobs:
       - uses: hendrikmuhs/ccache-action@main
         with:
           key: ${{ github.job }}-${{ matrix.os }}-${{ matrix.llvm-version }}
+          update-package-index: ${{ contains(matrix.os, 'ubuntu') }}
 
       - name: Setup Platform
         shell: bash -e -l {0}
@@ -353,14 +354,14 @@ jobs:
 
           mkdir -p $HOME/ext
           cd $HOME/ext
-          curl -o emsdk.tar.gz -L https://github.com/emscripten-core/emsdk/archive/refs/tags/4.0.13.tar.gz
+          curl -o emsdk.tar.gz -L https://github.com/emscripten-core/emsdk/archive/refs/tags/4.0.22.tar.gz
           tar -xvf emsdk.tar.gz
-          mv emsdk-4.0.13 emsdk
+          mv emsdk-4.0.22 emsdk
           export EMSDK_PATH=$HOME/ext/emsdk
           echo $EMSDK_PATH
           cd $EMSDK_PATH
-          ./emsdk install 3.1.35
-          ./emsdk activate 3.1.35
+          ./emsdk install 3.1.74
+          ./emsdk activate 3.1.74
           ./emsdk install node-18.20.3-64bit
           ./emsdk activate node-18.20.3-64bit
 
