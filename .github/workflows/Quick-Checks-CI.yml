@@ -340,11 +340,11 @@ jobs:
           key: ${{ github.job }}-${{ matrix.os }}
 
       - name : Remove existing node
-        shell: bash -l {0}
+        shell: bash -e -l {0}
         run : |
-            which node || true
-            node -v || true
-            sudo rm -rf /usr/local/bin/node /usr/local/bin/npm || true
+            which node
+            node -v
+            sudo rm -rf /usr/local/bin/node /usr/local/bin/npm
 
       - name: Setup Emscripten SDK
         shell: bash -l {0}
