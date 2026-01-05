@@ -391,10 +391,10 @@ jobs:
             node -v
             node src/lfortran/tests/test_lfortran.js
 
-      - name: Upload to wasm_builds
-        if: ${{ secrets.SSH_PRIVATE_KEY_WASM_BUILDS != '' }}
-        shell: bash -l {0}
-        run: |
-            ci/upload_lfortran_wasm.sh
-        env:
-          SSH_PRIVATE_KEY_WASM_BUILDS: ${{ secrets.SSH_PRIVATE_KEY_WASM_BUILDS }}
+      # Disabled: requires SSH_PRIVATE_KEY_WASM_BUILDS secret
+      # - name: Upload to wasm_builds
+      #   shell: bash -l {0}
+      #   run: |
+      #       ci/upload_lfortran_wasm.sh
+      #   env:
+      #     SSH_PRIVATE_KEY_WASM_BUILDS: ${{ secrets.SSH_PRIVATE_KEY_WASM_BUILDS }}
