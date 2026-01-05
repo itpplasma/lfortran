@@ -28,7 +28,7 @@ env:
 jobs:
   Build:
     name: LFortran CI (OS=${{ matrix.os }}, LLVM=${{ matrix.llvm-version }})
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ contains(matrix.os, 'ubuntu') && 'arc-runners' || matrix.os }}
     strategy:
       fail-fast: false
       matrix:
@@ -321,7 +321,7 @@ jobs:
 
   build_to_wasm_and_upload:
     name: Build LFortran to WASM and Upload
-    runs-on: "ubuntu-latest"
+    runs-on: arc-runners
     steps:
       - uses: actions/checkout@v6
         with:
@@ -391,9 +391,10 @@ jobs:
             node -v
             node src/lfortran/tests/test_lfortran.js
 
-      - name: Upload to wasm_builds
-        shell: bash -l {0}
-        run: |
-            ci/upload_lfortran_wasm.sh
-        env:
-          SSH_PRIVATE_KEY_WASM_BUILDS: ${{ secrets.SSH_PRIVATE_KEY_WASM_BUILDS }}
+      # Disabled: requires SSH_PRIVATE_KEY_WASM_BUILDS secret
+      # - name: Upload to wasm_builds
+      #   shell: bash -l {0}
+      #   run: |
+      #       ci/upload_lfortran_wasm.sh
+      #   env:
+      #     SSH_PRIVATE_KEY_WASM_BUILDS: ${{ secrets.SSH_PRIVATE_KEY_WASM_BUILDS }}
