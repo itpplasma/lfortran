@@ -28,7 +28,7 @@ env:
 jobs:
   Build:
     name: LFortran CI (OS=${{ matrix.os }}, LLVM=${{ matrix.llvm-version }})
-    runs-on: ${{ contains(matrix.os, 'ubuntu') && 'plasma-runners' || matrix.os }}
+    runs-on: ${{ contains(matrix.os, 'ubuntu') && 'arc-runners' || matrix.os }}
     strategy:
       fail-fast: false
       matrix:
@@ -321,7 +321,7 @@ jobs:
 
   build_to_wasm_and_upload:
     name: Build LFortran to WASM and Upload
-    runs-on: plasma-runners
+    runs-on: arc-runners
     steps:
       - uses: actions/checkout@v6
         with:
